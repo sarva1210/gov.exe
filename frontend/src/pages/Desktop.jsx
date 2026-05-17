@@ -13,6 +13,7 @@ import CookieBanner from "../components/CookieBanner"
 import CursorChaser from "../components/CursorChaser"
 import { glitchScreen } from "../effects/glitch"
 import { playWindowSound, playCashRegister, playStartupJingle } from "../effects/sound"
+import VirusCatastrophe from "../components/VirusCatastrophe"
 
 const TICKER_TEXT = "IMPORTANT: Portal under maintenance Jan 1 - Dec 31  |  New Aadhaar rule: must be laminated  |  Fax lines open 11:00–11:15 AM Tuesdays  |  Downloading this page is prohibited  |  Your session is being recorded for quality assurance  |  Citizens found scrolling horizontally will be fined  |  Minister of Digital Affairs congratulates you on using this portal  |  This message will self-destruct in 30 seconds (it will not)"
 
@@ -20,8 +21,8 @@ const TICKER_TEXT = "IMPORTANT: Portal under maintenance Jan 1 - Dec 31  |  New 
 const randomPos = (existing) => {
   let top, left, attempts = 0
   do {
-    top  = Math.floor(Math.random() * 35) + 5  
-    left = Math.floor(Math.random() * 45) + 5 
+    top = Math.floor(Math.random() * 35) + 5
+    left = Math.floor(Math.random() * 45) + 5
     attempts++
   } while (
     attempts < 20 &&
@@ -32,8 +33,8 @@ const randomPos = (existing) => {
 
 // Tax.exe inner component
 function TaxExe() {
-  const [step,    setStep]    = useState(1)
-  const [income,  setIncome]  = useState("")
+  const [step, setStep] = useState(1)
+  const [income, setIncome] = useState("")
   const [loading, setLoading] = useState(false)
   const [dispute, setDispute] = useState("")
   const tax = income ? Math.ceil(Number(income) * 4.7) + 47000 : 0
@@ -169,17 +170,53 @@ function MinistryDownloads() {
 function Desktop() {
   // openWindows: array of { title, top, left }
   const [openWindows, setOpenWindows] = useState([])
-  const [termLine,    setTermLine]    = useState("ACCESSING CITIZEN DATA...")
+  const [termLine, setTermLine] = useState("ACCESSING CITIZEN DATA...")
 
   // Virus Scanner state 
-  const [threats,      setThreats]      = useState(69)
-  const [virusClicks,  setVirusClicks]  = useState(0)
+  const [threats, setThreats] = useState(69)
+  const [virusClicks, setVirusClicks] = useState(0)
+  const [catastropheActive, setCatastropheActive] = useState(false)
 
   // Right-click context menu
   const [ctxMenu, setCtxMenu] = useState(null)
 
-  const rageLevel      = useChaosStore(s => s.rageLevel)
-  const incrementRage  = useChaosStore(s => s.incrementRage)
+  const rageLevel = useChaosStore(s => s.rageLevel)
+  const incrementRage = useChaosStore(s => s.incrementRage)
+
+  const [isShakingActive, setIsShakingActive] = useState(false)
+  const isHighRage = rageLevel >= 80
+
+  // Handle intermittent screen shake during high rage
+  useEffect(() => {
+    if (!isHighRage) {
+      setIsShakingActive(false)
+      return
+    }
+
+    let activeTimeout
+    let gapTimeout
+
+    const triggerShake = () => {
+      setIsShakingActive(true)
+
+      const shakeDuration = 4000
+      activeTimeout = setTimeout(() => {
+        setIsShakingActive(false)
+
+        const randomGap = 30000 + Math.random() * 10000
+        gapTimeout = setTimeout(() => {
+          triggerShake()
+        }, randomGap)
+      }, shakeDuration)
+    }
+
+    triggerShake()
+
+    return () => {
+      clearTimeout(activeTimeout)
+      clearTimeout(gapTimeout)
+    }
+  }, [isHighRage])
 
   //glitch every 10 s 
   useEffect(() => {
@@ -224,6 +261,12 @@ function Desktop() {
     setVirusClicks(next)
     setThreats(t => t + Math.floor(Math.random() * 13) + 3)
     incrementRage(10)
+
+    if (next >= 3) {
+      setTimeout(() => {
+        setCatastropheActive(true)
+      }, 1000)
+    }
   }
 
   const handleContextMenu = (e) => {
@@ -233,11 +276,13 @@ function Desktop() {
   const closeCtxMenu = () => setCtxMenu(null)
 
   // Rage level effects
-  const rageStyle = rageLevel >= 80
+  const rageStyle = (rageLevel >= 80 && isShakingActive)
     ? { animation: "shake 0.1s infinite", filter: "saturate(3)" }
-    : rageLevel >= 60
-    ? { filter: "hue-rotate(20deg) saturate(2)" }
-    : {}
+    : rageLevel >= 80
+      ? { filter: "saturate(3)" }
+      : rageLevel >= 60
+        ? { filter: "hue-rotate(20deg) saturate(2)" }
+        : {}
 
   return (
     <div
@@ -263,9 +308,9 @@ function Desktop() {
       <PopupSpawner />
 
       {/* notifications */}
-      <Notification text="Citizen monitored"               top={20} left={70} />
-      <Notification text="Tax fraud probability: 89%"      top={40} left={72} />
-      <Notification text="Webcam emotionally activated"    top={60} left={73} />
+      <Notification text="Citizen monitored" top={20} left={70} />
+      <Notification text="Tax fraud probability: 89%" top={40} left={72} />
+      <Notification text="Webcam emotionally activated" top={60} left={73} />
 
       {/*Rage meter */}
       <div
@@ -273,8 +318,8 @@ function Desktop() {
           ${rageLevel > 70
             ? "bg-red-600 text-white border-red-300 animate-pulse scale-110"
             : rageLevel > 40
-            ? "bg-red-900 text-red-400 border-red-500"
-            : "bg-black text-red-500 border-red-500"
+              ? "bg-red-900 text-red-400 border-red-500"
+              : "bg-black text-red-500 border-red-500"
           }`}
       >
         Rage Level: {rageLevel}% {rageLevel > 70 && "💀"}
@@ -294,10 +339,10 @@ function Desktop() {
 
       {/* Desktop icons */}
       <div className="p-5 flex flex-col gap-6 relative z-20">
-        <DesktopIcon title="Citizen Login"         onClick={() => openWindow("Citizen Login")} />
-        <DesktopIcon title="Tax.exe"               onClick={() => openWindow("Tax.exe")} />
-        <DesktopIcon title="Virus Scanner"         onClick={() => openWindow("Virus Scanner")} />
-        <DesktopIcon title="National Form"         onClick={() => openWindow("National Form")} />
+        <DesktopIcon title="Citizen Login" onClick={() => openWindow("Citizen Login")} />
+        <DesktopIcon title="Tax.exe" onClick={() => openWindow("Tax.exe")} />
+        <DesktopIcon title="Virus Scanner" onClick={() => openWindow("Virus Scanner")} />
+        <DesktopIcon title="National Form" onClick={() => openWindow("National Form")} />
         <DesktopIcon title="Ministry of Downloads" onClick={() => openWindow("Ministry of Downloads")} />
       </div>
 
@@ -306,8 +351,8 @@ function Desktop() {
       {isOpen("Citizen Login") && (
         <Window title="Citizen Login" pos={getPos("Citizen Login")} onClose={() => closeWindow("Citizen Login")}>
           <div className="flex flex-col gap-4">
-            <input type="text"     placeholder="Citizen ID" className="border p-2" />
-            <input type="password" placeholder="Password"   className="border p-2" />
+            <input type="text" placeholder="Citizen ID" className="border p-2" />
+            <input type="password" placeholder="Password" className="border p-2" />
             <button
               onClick={() => window.location.href = "/login"}
               className="bg-blue-700 text-white py-2"
@@ -373,9 +418,9 @@ function Desktop() {
         >
           {[
             ["Report Suspicious Activity", "Thank you. You have been reported."],
-            ["Request Help",               "Help is unavailable. Please fill Form 27-B."],
-            ["Logout",                     "Logout disabled for security. Please restart your computer."],
-            ["Print Screen (Prohibited)",  "Screenshot attempt logged. Fine: 200 INR."],
+            ["Request Help", "Help is unavailable. Please fill Form 27-B."],
+            ["Logout", "Logout disabled for security. Please restart your computer."],
+            ["Print Screen (Prohibited)", "Screenshot attempt logged. Fine: 200 INR."],
           ].map(([label, msg]) => (
             <div
               key={label}
@@ -386,6 +431,16 @@ function Desktop() {
             </div>
           ))}
         </div>
+      )}
+
+      {catastropheActive && (
+        <VirusCatastrophe
+          onComplete={() => {
+            setCatastropheActive(false)
+            setVirusClicks(0)
+            setThreats(69)
+          }}
+        />
       )}
 
       <Taskbar />

@@ -10,25 +10,25 @@ function BootScreen() {
     "Initializing Government Surveillance..."
 
   useEffect(() => {
-    playDialupSound()   
+    playDialupSound()
     let index = 0
 
     const interval = setInterval(() => {
       setText(message.slice(0, index))
       index++
 
-      if(index > message.length){
+      if (index > message.length) {
         clearInterval(interval)
 
         setTimeout(() => {
           navigate("/desktop")
-        },4000)
+        }, 4000)
 
       }
-    },70)
+    }, 70)
 
     return () => clearInterval(interval)
-  },[])
+  }, [])
 
   return (
     <div className="h-screen relative overflow-hidden flex items-center justify-center">

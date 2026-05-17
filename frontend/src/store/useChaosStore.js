@@ -5,19 +5,16 @@ const useChaosStore = create((set) => ({
   notifications: [],
   virusThreatCount: 69,
 
-  // Original action — preserved exactly
   increaseRage: () =>
     set((state) => ({
       rageLevel: Math.min(state.rageLevel + 10, 100),
     })),
 
-  // NEW: alias expected by spec §4.5 — increments by a custom amount (default 10)
   incrementRage: (amount = 10) =>
     set((state) => ({
       rageLevel: Math.min(state.rageLevel + amount, 100),
     })),
 
-  // NEW: Virus Scanner threat multiplication (Desktop §3.3-A)
   increaseThreats: () =>
     set((state) => ({
       virusThreatCount:
