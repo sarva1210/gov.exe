@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import eyesVideo from "../assets/eyes.mp4"
 
 function BootScreen() {
   const navigate = useNavigate()
@@ -22,17 +21,20 @@ function BootScreen() {
         setTimeout(() => {
           navigate("/desktop")
         },4000)
+
       }
     },70)
+
     return () => clearInterval(interval)
   },[])
 
   return (
     <div className="h-screen relative overflow-hidden flex items-center justify-center">
-
-      {/* background video */}
-      <video autoPlay muted loop className="absolute inset-0 w-full h-full object-cover">
-        <source src={eyesVideo} type="video/mp4"/>
+      <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+        <source
+          src="/eyes.mp4"
+          type="video/mp4"
+        />
       </video>
 
       {/* dark overlay */}
@@ -40,7 +42,6 @@ function BootScreen() {
 
       {/* text */}
       <h1 className="relative z-20 text-green-500 text-4xl font-mono glitch text-center px-5"> {text} </h1>
-
     </div>
   )
 }
