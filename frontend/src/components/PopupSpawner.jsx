@@ -30,7 +30,7 @@ function PopupSpawner() {
 
       setPopups((prev) => [...prev, popup])
 
-      /* auto remove after 10 sec */
+      /* auto remove after 2 sec */
 
       setTimeout(() => {
         setPopups((prev) =>
