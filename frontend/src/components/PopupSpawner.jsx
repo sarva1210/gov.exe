@@ -14,9 +14,10 @@ function PopupSpawner() {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      const id = Date.now()
 
       const popup = {
-        id:Date.now(),
+        id,
 
         text:
           messages[
@@ -28,7 +29,15 @@ function PopupSpawner() {
       }
 
       setPopups((prev) => [...prev, popup])
-    },7000)
+
+      /* auto remove after 10 sec */
+
+      setTimeout(() => {
+        setPopups((prev) =>
+          prev.filter((p) => p.id !== id)
+        )
+      },10000)
+    },4000)
 
     return () => clearInterval(interval)
   },[])
