@@ -3,6 +3,9 @@ import Taskbar from "../components/Taskbar"
 import DesktopIcon from "../components/DesktopIcon"
 import Window from "../components/Window"
 import VirusPopup from "../components/VirusPopup"
+import FakeAds from "../components/FakeAds"
+import BSOD from "../components/BSOD"
+import Notification from "../components/Notification"
 import Scene from "../three/Scene"
 import useChaosStore from "../store/useChaosStore"
 
@@ -18,10 +21,25 @@ function Desktop() {
   }
 
   return (
-    <div className="h-screen w-full overflow-hidden relative bg-gradient-to-br from-blue-900 via-blue-700 to-cyan-500">
+    <div className="h-screen w-full overflow-auto relative bg-gradient-to-br from-blue-900 via-blue-700 to-cyan-500 scanlines">
 
       {/* 3JS background */}
       <Scene />
+
+      {/* fake blue screen */}
+      <BSOD />
+
+      {/* fake ads */}
+      <FakeAds />
+
+      {/* notifications */}
+      <div className="absolute top-24 right-5 flex flex-col gap-4 z-50">
+        <Notification text="Citizen monitored" />
+        <Notification text="Tax fraud probability: 89%" />
+        <Notification text="Webcam emotionally activated" />
+      </div>
+
+      {/* rage meter */}
 
       {/* rage meter */}
       <div className="absolute top-5 right-5 bg-black text-red-500 px-5 py-3 border-2 border-red-500 z-50">

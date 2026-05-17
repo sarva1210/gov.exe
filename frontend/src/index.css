@@ -1,9 +1,56 @@
 @import "tailwindcss";
 
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   overflow:hidden;
   background:black;
   cursor:none;
   font-family:monospace;
+}
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:red;
+}
+
+.glitch{
+  animation:glitch 0.2s infinite;
+}
+
+@keyframes glitch{
+  0%{
+    transform:translate(2px,2px);
+  }
+  25%{
+    transform:translate(-2px,-2px);
+  }
+  50%{
+    transform:translate(2px,-2px);
+  }
+  75%{
+    transform:translate(-2px,2px);
+  }
+  100%{
+    transform:translate(0px,0px);
+  }
+}
+
+.scanlines::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.05) 4px
+  );
+  pointer-events:none;
 }
