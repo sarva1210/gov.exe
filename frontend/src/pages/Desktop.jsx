@@ -14,6 +14,7 @@ import CursorChaser from "../components/CursorChaser"
 import { glitchScreen } from "../effects/glitch"
 import { playWindowSound, playCashRegister, playStartupJingle } from "../effects/sound"
 import VirusCatastrophe from "../components/VirusCatastrophe"
+import RickrollPDFViewer from "../components/RickrollPDFViewer"
 
 const TICKER_TEXT = "IMPORTANT: Portal under maintenance Jan 1 - Dec 31  |  New Aadhaar rule: must be laminated  |  Fax lines open 11:00–11:15 AM Tuesdays  |  Downloading this page is prohibited  |  Your session is being recorded for quality assurance  |  Citizens found scrolling horizontally will be fined  |  Minister of Digital Affairs congratulates you on using this portal  |  This message will self-destruct in 30 seconds (it will not)"
 
@@ -92,15 +93,21 @@ function TaxExe() {
 }
 
 // Ministry of Downloads inner component
-function MinistryDownloads() {
+function MinistryDownloads({ onDownloadCertificate }) {
   const [prog1, setProg1] = useState(0)
   const [prog2, setProg2] = useState(0)
 
-  const startDownload = (setter, filename, content) => {
+  const startDownload = (setter, filename, content, isCertificate = false) => {
     setter(0)
     const t = setInterval(() => {
       setter(p => {
-        if (p >= 98) { clearInterval(t); return 98 }
+        if (p >= 98) { 
+          clearInterval(t)
+          if (isCertificate && onDownloadCertificate) {
+            onDownloadCertificate()
+          }
+          return 98 
+        }
         return Math.min(p + 3, 98)
       })
     }, 90)
@@ -123,7 +130,8 @@ function MinistryDownloads() {
           onClick={() => startDownload(
             setProg1,
             "citizen_certificate.pdf",
-            "This document is intentionally left blank. Reference: PENDING."
+            "This document is intentionally left blank. Reference: PENDING.",
+            true
           )}
           className="bg-green-700 text-white py-2 px-4 w-full"
         >
@@ -176,6 +184,7 @@ function Desktop() {
   const [threats, setThreats] = useState(69)
   const [virusClicks, setVirusClicks] = useState(0)
   const [catastropheActive, setCatastropheActive] = useState(false)
+  const [rickrollActive, setRickrollActive] = useState(false)
 
   // Right-click context menu
   const [ctxMenu, setCtxMenu] = useState(null)
@@ -405,7 +414,7 @@ function Desktop() {
 
       {isOpen("Ministry of Downloads") && (
         <Window title="Official Government File Download Portal" pos={getPos("Ministry of Downloads")} onClose={() => closeWindow("Ministry of Downloads")}>
-          <MinistryDownloads />
+          <MinistryDownloads onDownloadCertificate={() => setRickrollActive(true)} />
         </Window>
       )}
 
@@ -440,6 +449,12 @@ function Desktop() {
             setVirusClicks(0)
             setThreats(69)
           }}
+        />
+      )}
+
+      {rickrollActive && (
+        <RickrollPDFViewer
+          onClose={() => setRickrollActive(false)}
         />
       )}
 
