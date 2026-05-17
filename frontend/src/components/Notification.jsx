@@ -7,7 +7,7 @@ function Notification({ text, top, left }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(false)
-    },10000)
+    },2000)
 
     return () => clearTimeout(timer)
   },[])

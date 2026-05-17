@@ -36,7 +36,7 @@ function PopupSpawner() {
         setPopups((prev) =>
           prev.filter((p) => p.id !== id)
         )
-      },10000)
+      },2000)
     },4000)
 
     return () => clearInterval(interval)
