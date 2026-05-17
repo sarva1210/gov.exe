@@ -1,20 +1,21 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import BootScreen from "./pages/BootScreen"
-import Desktop from "./pages/Desktop"
-import Login from "./pages/Login"
-import FormPortal from "./pages/FormPortal"
-import Result from "./pages/Result"
+import { BrowserRouter } from "react-router-dom"
+import { useEffect } from "react"
+import Cursor from "./components/Cursor"
+import AppRoutes from "./routes/AppRoutes"
+import { cursorChaos } from "./effects/cursorChaos"
 
 function App() {
+  useEffect(() => {
+    cursorChaos()
+  },[])
+
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<BootScreen />} />
-        <Route path="/desktop" element={<Desktop />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/form" element={<FormPortal />} />
-        <Route path="/result" element={<Result />} />
-      </Routes>
+
+      <Cursor />
+
+      <AppRoutes />
+
     </BrowserRouter>
   )
 }
