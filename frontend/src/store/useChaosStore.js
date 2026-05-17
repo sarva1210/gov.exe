@@ -1,26 +1,38 @@
 import { create } from "zustand"
 
 const useChaosStore = create((set) => ({
-  rageLevel:0,
-  notifications:[],
+  rageLevel: 0,
+  notifications: [],
+  virusThreatCount: 69,
 
-  increaseRage:() =>
+  // Original action — preserved exactly
+  increaseRage: () =>
     set((state) => ({
-      rageLevel: state.rageLevel + 10
+      rageLevel: Math.min(state.rageLevel + 10, 100),
     })),
 
-  addNotification:(message) =>
+  // NEW: alias expected by spec §4.5 — increments by a custom amount (default 10)
+  incrementRage: (amount = 10) =>
     set((state) => ({
-      notifications:[
-        ...state.notifications,
-        message
-      ]
+      rageLevel: Math.min(state.rageLevel + amount, 100),
     })),
 
-  clearNotifications:() =>
+  // NEW: Virus Scanner threat multiplication (Desktop §3.3-A)
+  increaseThreats: () =>
+    set((state) => ({
+      virusThreatCount:
+        state.virusThreatCount + Math.floor(Math.random() * 13) + 3,
+    })),
+
+  addNotification: (message) =>
+    set((state) => ({
+      notifications: [...state.notifications, message],
+    })),
+
+  clearNotifications: () =>
     set({
-      notifications:[]
-    })
+      notifications: [],
+    }),
 }))
 
 export default useChaosStore

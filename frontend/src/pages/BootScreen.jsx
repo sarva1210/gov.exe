@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { playDialupSound } from "../effects/sound"
 
 function BootScreen() {
   const navigate = useNavigate()
@@ -9,6 +10,7 @@ function BootScreen() {
     "Initializing Government Surveillance..."
 
   useEffect(() => {
+    playDialupSound()   
     let index = 0
 
     const interval = setInterval(() => {
