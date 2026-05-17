@@ -5,7 +5,6 @@ function VirusPopup() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    playErrorSound()
     const timer = setTimeout(() => {
       setShow(true)
     },3000)
@@ -20,7 +19,7 @@ function VirusPopup() {
 
       <h1 className="text-xl font-bold"> VIRUS DETECTED </h1>
       <p className="mt-2"> Citizen data compromised. </p>
-      <button className="mt-4 bg-black px-4 py-2"> Ignore Warning </button>
+      <button onClick={playErrorSound} className="mt-4 bg-black px-4 py-2"> Ignore Warning </button>
 
     </div>
   )
