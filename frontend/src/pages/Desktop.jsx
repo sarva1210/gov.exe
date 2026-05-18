@@ -210,33 +210,6 @@ function Desktop() {
   // Tsunami State
   const [tsunamiActive, setTsunamiActive] = useState(false);
 
-  // Periodic Tsunami Wave scheduler (Every 20 seconds)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTsunamiActive(true);
-      
-      // Scatter icons after the sweep completes (1.3 seconds)
-      setTimeout(() => {
-        setIconPositions((prev) => {
-          const next = { ...prev };
-          Object.keys(next).forEach((key) => {
-            const marginX = 180;
-            const marginY = 220;
-            next[key] = {
-              top: Math.floor(Math.random() * (window.innerHeight - marginY) + 60),
-              left: Math.floor(Math.random() * (window.innerWidth - marginX) + 60),
-            };
-          });
-          return next;
-        });
-        setTsunamiActive(false);
-        playErrorSound();
-      }, 1300);
-    }, 20000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   // Handle screen shake
   useEffect(() => {
     if (!isHighRage) {
@@ -521,25 +494,7 @@ function Desktop() {
         />
       )}
 
-      {/* Sleek Tsunami Wave animation canvas */}
-      {tsunamiActive && (
-        <div className="fixed inset-y-0 left-0 bg-gradient-to-r from-indigo-500/60 via-cyan-500/70 to-indigo-600/60 backdrop-blur-[2px] z-[999999] pointer-events-none animate-[tsunamiSweep_1.3s_ease-in-out_forwards] border-r-[12px] border-cyan-300 shadow-[0_0_80px_rgba(6,182,212,0.6)] flex items-center justify-center">
-          <div className="text-white font-black text-4xl tracking-widest uppercase select-none opacity-40 font-sans italic">
-            ⚠️ LIQUIDATING DESKTOP GRID 🌊
-          </div>
-        </div>
-      )}
-
       <Taskbar />
-
-      {/* Styled Tsunami in inline stylesheet */}
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes tsunamiSweep {
-          0% { width: 0%; left: 0%; }
-          50% { width: 60%; left: 0%; }
-          100% { width: 0%; left: 100%; }
-        }
-      `}} />
     </div>
   );
 }
