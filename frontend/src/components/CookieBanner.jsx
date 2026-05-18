@@ -1,120 +1,170 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react";
 
-const COOKIE_KEY = "gov_exe_cookies_accepted"
+const COOKIE_KEY = "gov_exe_cookies_accepted";
 
 const CATEGORIES = [
   "Emotional Analytics", "Dream Data Collection", "Biometric Vibes",
   "Subconsciousness Tracking", "Patriotism Monitoring", "Anger Profiling",
   "Sleep Pattern Analysis", "Grocery Habit Surveillance", "Blink Rate Recording",
   "Loyalty Score Computation", "Thought Pattern Indexing", "Aura Scanning",
-  "Social Credit Mapping", "Existential Dread Logging", "Nostril Preference Data",
-  "Favourite Colour Transmission", "Childhood Memory Extraction", "Digestive Rhythm Sync",
-  "Micro-Expression Harvesting", "Soul Fragmentation Index", "Ambient Noise Capture",
-  "Screen Time Emotional Impact", "Keyboard Pressure Analytics", "Cursor Hesitation Log",
-  "Font Preference Profiling", "Scroll Speed Sentiment", "Tab Count Psychology",
-  "Browser Language Feelings", "Window Resize Intent", "Double-Click Aggression",
-  "Copy-Paste Frequency", "Autocomplete Surrender Rate", "404 Emotional Response",
-  "Loading Screen Patience", "CAPTCHA Failure Shame", "Timezone Existential Data",
-  "Battery Level Anxiety", "Wi-Fi Signal Sadness", "Notification Dismissal Trauma",
-  "Ad Blindness Quotient", "Incognito Mode Guilt", "Bookmark Hoarding Index",
-  "Extension Count Paranoia", "History Deletion Frequency", "Dark Mode Mood Correlation",
-  "Zoom Level Self-Esteem", "Typing Speed Confidence",
-]
+];
+
+const EMOTIONAL_PHRASES = [
+  "Are you sure?",
+  "You hurt our feelings. 🥺",
+  "Our cookies are baked with love.",
+  "Rejecting cookies will increase your income tax by 47%.",
+  "This refusal has been logged in your permanent citizen record.",
+  "Please think of our server's children.",
+  "A sad tear has been shed in the Ministry of Cookies.",
+  "Is it something we said?",
+  "Re-evaluating citizen loyalty...",
+];
 
 export default function CookieBanner() {
-  const [visible,      setVisible]      = useState(false)
-  const [showCustom,   setShowCustom]   = useState(false)
+  const [visible, setVisible] = useState(false);
+  const [showCustom, setShowCustom] = useState(false);
+  const [mafiaPopups, setMafiaPopups] = useState([]);
+  const [followCursor, setFollowCursor] = useState(false);
+  const [acceptPos, setAcceptPos] = useState({ x: 0, y: 0 });
+  const acceptButtonRef = useRef(null);
 
   useEffect(() => {
-    if (!localStorage.getItem(COOKIE_KEY)) setVisible(true)
-  }, [])
+    if (!localStorage.getItem(COOKIE_KEY)) {
+      setVisible(true);
+    }
+  }, []);
+
+  // Accept cursor tracking
+  useEffect(() => {
+    if (!followCursor) return;
+
+    const handleMouseMove = (e) => {
+      // Keep the Accept button locked directly under the mouse so any click accepts!
+      setAcceptPos({
+        x: e.clientX - 100,
+        y: e.clientY - 20,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [followCursor]);
 
   const acceptAll = () => {
-    localStorage.setItem(COOKIE_KEY, "1")
-    setVisible(false)
-    setShowCustom(false)
-  }
+    localStorage.setItem(COOKIE_KEY, "1");
+    setVisible(false);
+    setShowCustom(false);
+    setFollowCursor(false);
+    setMafiaPopups([]);
+  };
 
-  if (!visible) return null
+  const handleReject = (e) => {
+    e.preventDefault();
+    setFollowCursor(true);
+
+    // Spawn 5 emotional popups at random coordinates
+    const newPopups = Array.from({ length: 6 }).map((_, i) => ({
+      id: Date.now() + i,
+      x: Math.random() * (window.innerWidth - 250),
+      y: Math.random() * (window.innerHeight - 150),
+      text: EMOTIONAL_PHRASES[Math.floor(Math.random() * EMOTIONAL_PHRASES.length)],
+    }));
+
+    setMafiaPopups((prev) => [...prev, ...newPopups]);
+  };
+
+  if (!visible) return null;
 
   return (
     <>
-      {/* Main banner */}
+      {/* Main sleek cookie banner */}
       <div
-        className="fixed bottom-0 left-0 w-full bg-gray-900 text-white border-t-4 border-red-600 z-[99998] p-5"
-        onClick={e => e.stopPropagation()}
+        className="fixed bottom-6 right-6 w-full max-w-lg bg-white/90 backdrop-blur-md text-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-200/60 z-[99998] p-6 rounded-2xl transition-all duration-300 font-sans"
+        onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-lg font-bold mb-1">
-          🍪 This portal uses <strong>47 mandatory cookies</strong> required by Government Order 47-B.
-        </p>
-        <p className="text-sm text-gray-400 mb-4">
-          These cookies are non-optional. Refusal to accept constitutes suspicious behaviour and will be logged.
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-3xl animate-bounce">🍪</span>
+          <div>
+            <h3 className="font-bold text-lg text-slate-900 leading-tight">
+              Cookie Consent Compliance
+            </h3>
+            <p className="text-xs text-slate-500">
+              Regulatory directive 2007-47B
+            </p>
+          </div>
+        </div>
+
+        <p className="text-sm text-slate-600 mb-4">
+          This secure citizen portal utilizes micro-tracking cookies to optimize your biometric resonance score and state loyalty indexing.
         </p>
 
-        {/* 47 toggle grid */}
-        <div className="grid grid-cols-4 gap-1 mb-4 max-h-36 overflow-y-auto pr-2">
+        {/* Categories display */}
+        <div className="flex flex-wrap gap-1.5 mb-4 max-h-24 overflow-y-auto pr-1">
           {CATEGORIES.map((cat) => (
-            <label key={cat} className="flex items-center gap-2 text-xs bg-gray-800 px-2 py-1 rounded cursor-not-allowed">
-              <input type="checkbox" checked readOnly className="accent-red-500" />
-              <span className="truncate">{cat}</span>
-            </label>
+            <span
+              key={cat}
+              className="text-[10px] bg-slate-100 border border-slate-200/50 text-slate-600 px-2 py-0.5 rounded-full select-none"
+            >
+              ✓ {cat}
+            </span>
           ))}
         </div>
 
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex gap-2 justify-end relative">
           <button
-            onClick={acceptAll}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 font-bold transition"
+            onClick={handleReject}
+            className="border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer"
           >
-            Accept Necessary Only
+            Reject All
           </button>
+          
           <button
-            onClick={() => setShowCustom(true)}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 transition"
+            ref={acceptButtonRef}
+            onClick={acceptAll}
+            style={
+              followCursor
+                ? {
+                    position: "fixed",
+                    left: `${acceptPos.x}px`,
+                    top: `${acceptPos.y}px`,
+                    zIndex: 999999,
+                    pointerEvents: "auto",
+                  }
+                : {}
+            }
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-lg hover:shadow-indigo-500/30 transition duration-150 cursor-pointer whitespace-nowrap"
           >
-            Customise Preferences
+            Accept Mandatory
           </button>
         </div>
       </div>
 
-      {/* Customise modal */}
-      {showCustom && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/70">
-          <div
-            className="bg-gray-900 text-white border-4 border-red-600 p-6 w-[700px] max-h-[80vh] overflow-y-auto"
-            onClick={e => e.stopPropagation()}
-          >
-            <h2 className="text-2xl font-bold mb-2">Customise Cookie Preferences</h2>
-            <p className="text-sm text-red-400 mb-4">
-              All preferences are locked ON by Government Order 47-B. They cannot be disabled.
-            </p>
-
-            <div className="flex flex-col gap-2 mb-6">
-              {CATEGORIES.map((cat) => (
-                <div key={cat} className="flex items-center justify-between bg-gray-800 px-4 py-2 rounded opacity-70 cursor-not-allowed">
-                  <span className="text-sm">{cat}</span>
-                  <div className="relative group">
-                    <input
-                      type="checkbox" checked readOnly
-                      className="accent-red-500 cursor-not-allowed"
-                    />
-                    <span className="absolute right-6 top-0 bg-black text-yellow-400 text-xs px-2 py-1 rounded whitespace-nowrap hidden group-hover:block border border-yellow-600">
-                      Required by Government Order 47-B
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={acceptAll}
-              className="w-full bg-red-600 hover:bg-red-700 text-white py-3 font-bold transition"
-            >
-              Accept All (the only option)
-            </button>
+      {/* Mafia Emotional Popups */}
+      {mafiaPopups.map((pop) => (
+        <div
+          key={pop.id}
+          style={{
+            position: "fixed",
+            left: `${pop.x}px`,
+            top: `${pop.y}px`,
+            zIndex: 999995,
+          }}
+          className="bg-white text-slate-900 border-2 border-rose-500 rounded-xl p-4 shadow-xl w-60 animate-bounce font-sans text-sm flex flex-col gap-2"
+        >
+          <div className="flex items-center justify-between border-b border-rose-100 pb-1 font-bold text-rose-600 text-xs">
+            <span>🍪 COOKIE CRITICAL</span>
+            <span className="cursor-not-allowed text-slate-400">✕</span>
           </div>
+          <p className="text-slate-700 leading-snug">{pop.text}</p>
+          <button
+            onClick={acceptAll}
+            className="w-full bg-rose-500 hover:bg-rose-600 text-white text-xs py-1.5 rounded font-semibold transition"
+          >
+            Accept Cookies Instead
+          </button>
         </div>
-      )}
+      ))}
     </>
-  )
+  );
 }
