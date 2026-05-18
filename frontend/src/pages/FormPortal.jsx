@@ -230,7 +230,7 @@ function FormPortal() {
   const toggleCheck = (k) => setCheckboxes(c => ({ ...c, [k]: !c[k] }))
 
   return (
-    <div className="min-h-screen bg-yellow-200 p-6 md:p-10 relative overflow-y-auto w-full">
+    <div className="min-h-screen bg-yellow-200 p-6 md:p-10 relative overflow-y-scroll w-full">
 
       {/* Session timer — top right (Feature C) */}
       <div className="fixed top-4 right-6 bg-red-700 text-white font-mono px-4 py-2 z-50 text-xl border-4 border-red-900 animate-pulse">
