@@ -111,7 +111,7 @@ export default function VirusCatastrophe({ onComplete }) {
   const SIT_DURATION = 23000
   const BOMB_DURATION = 3500
   const BLAST_DURATION = 1500
-  const FUNERAL_DURATION = 3000
+  const FUNERAL_DURATION = 5000
 
   useEffect(() => {
     // 1. Walk phase
@@ -478,11 +478,11 @@ export default function VirusCatastrophe({ onComplete }) {
                 className="bg-amber-600 h-full"
                 initial={{ width: "100%" }}
                 animate={{ width: "0%" }}
-                transition={{ duration: 3, ease: "linear" }}
+                transition={{ duration: 5, ease: "linear" }}
               />
             </div>
             <p className="text-[10px] text-amber-700 mt-2 font-mono">
-              PREPARING TO DEPORT SOUL TO DESKTOP IN 3 SECONDS...
+              PREPARING TO DEPORT SOUL TO DESKTOP IN 5 SECONDS...
             </p>
           </motion.div>
         </div>
