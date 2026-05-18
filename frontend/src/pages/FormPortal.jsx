@@ -230,20 +230,20 @@ function FormPortal() {
   const toggleCheck = (k) => setCheckboxes(c => ({ ...c, [k]: !c[k] }))
 
   return (
-    <div className="min-h-screen bg-yellow-200 p-6 md:p-10 relative overflow-y-scroll w-full">
+    <div className="h-screen bg-yellow-200 p-6 md:p-8 flex flex-col relative overflow-hidden w-full">
 
       {/* Session timer — top right (Feature C) */}
       <div className="fixed top-4 right-6 bg-red-700 text-white font-mono px-4 py-2 z-50 text-xl border-4 border-red-900 animate-pulse">
         SESSION EXPIRES: {mm}:{ss}
       </div>
 
-      <h1 className="text-4xl md:text-6xl font-bold mb-10 text-red-600">
+      <h1 className="text-3xl md:text-5xl font-bold mb-6 text-red-600 text-center shrink-0">
         National Citizen Verification Form
       </h1>
 
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-start justify-center max-w-full">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-stretch justify-center max-w-full flex-1 min-h-0">
         {/*  Form panel  */}
-        <form onSubmit={handleSubmit} className="bg-white border-8 border-black p-6 md:p-10 w-full max-w-[560px] flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="bg-white border-8 border-black p-6 md:p-10 w-full max-w-[560px] flex flex-col gap-5 overflow-y-scroll h-full shrink-0">
 
           <div>
             <input
@@ -372,7 +372,7 @@ function FormPortal() {
           </button>
         </form>
 
-        <div className="bg-black text-green-500 p-6 md:p-10 w-full max-w-[500px] h-fit lg:sticky lg:top-10">
+        <div className="bg-black text-green-500 p-6 md:p-10 w-full max-w-[500px] h-full overflow-y-scroll flex flex-col gap-4 shrink-0">
           <h2 className="text-3xl mb-5 font-mono">LIVE GOVERNMENT WARNINGS</h2>
           <div className="flex flex-col gap-4 text-lg font-mono">
             {warnings.map((w, i) => (
