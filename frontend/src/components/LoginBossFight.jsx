@@ -145,7 +145,7 @@ export default function LoginBossFight({ isOpen, onDefeat, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[99999] flex items-center justify-center font-sans p-4">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] w-full max-w-2xl overflow-hidden flex flex-col">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3)] w-full max-w-2xl max-h-[94vh] overflow-y-auto flex flex-col">
         {/* Header */}
         <div className="bg-slate-50 border-b border-slate-100 p-6 flex justify-between items-center">
           <div>

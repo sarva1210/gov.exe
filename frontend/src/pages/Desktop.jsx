@@ -203,8 +203,8 @@ function Desktop() {
     "Virus Scanner": { top: 260, left: 40 },
     "National Form": { top: 360, left: 40 },
     "Ministry of Downloads": { top: 460, left: 40 },
-    "Ministry of Merch": { top: 560, left: 40 },
-    "Captcha.exe": { top: 660, left: 40 },
+    "Ministry of Merch": { top: 60, left: 160 },
+    "Captcha.exe": { top: 160, left: 160 },
   });
 
   // Tsunami State
